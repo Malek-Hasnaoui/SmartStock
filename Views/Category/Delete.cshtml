@@ -1,0 +1,22 @@
+@model SmartStock.Models.Category
+
+<h1>Supprimer une catégorie</h1>
+
+<h4>Voulez-vous vraiment supprimer cette catégorie ?</h4>
+
+<div>
+    <p><strong>Nom :</strong> @Model.Name</p>
+    <p><strong>Description :</strong> @Model.Description</p>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <button type="submit" class="btn btn-danger">
+        Confirmer la suppression
+    </button>
+
+    <a asp-action="Index" class="btn btn-secondary">
+        Annuler
+    </a>
+</form>

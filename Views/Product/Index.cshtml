@@ -1,0 +1,222 @@
+﻿@model List<SmartStock.Models.Product>
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<style>
+    .products-container {
+        padding: 30px 15px;
+    }
+
+    .products-header {
+        background: linear-gradient(135deg, #2563eb, #7c3aed);
+        color: white;
+        padding: 30px;
+        border-radius: 18px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 25px rgba(37, 99, 235, 0.2);
+    }
+
+        .products-header h2 {
+            font-weight: 700;
+        }
+
+    .product-card {
+        background: white;
+        border-radius: 16px;
+        padding: 22px;
+        height: 100%;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+    .product-name {
+        font-size: 20px;
+        font-weight: 700;
+        color: #2563eb;
+    }
+
+    .product-description {
+        color: #64748b;
+        min-height: 45px;
+    }
+
+    .product-info {
+        margin-top: 15px;
+        line-height: 2;
+    }
+
+    .product-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 18px;
+    }
+
+        .product-actions a {
+            flex: 1;
+        }
+
+    body.dark-mode .product-card {
+        background: #1e293b;
+        color: #f1f5f9;
+    }
+
+    body.dark-mode .product-description {
+        color: #cbd5e1;
+    }
+
+    body.dark-mode .product-name {
+        color: #93c5fd;
+    }
+
+    @@media (max-width: 768px) {
+        .products-header {
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="container products-container">
+
+    <!-- Header -->
+    <div class="products-header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+            <div>
+                <h2>📦 Products Management</h2>
+                <p class="mb-0">
+                    Manage your products, prices and stock levels.
+                </p>
+            </div>
+
+            <a asp-controller="Product"
+               asp-action="Create"
+               class="btn btn-light fw-bold">
+                + Add New Product
+            </a>
+
+        </div>
+    </div>
+
+    <!-- Products List -->
+    <div class="row g-4">
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="col-12">
+                <div class="alert alert-info text-center p-5">
+                    <h4>No Products Found</h4>
+                    <p>Start by adding your first product.</p>
+
+                    <a asp-action="Create"
+                       class="btn btn-primary">
+                        Add Product
+                    </a>
+                </div>
+            </div>
+        }
+        else
+        {
+            @foreach (var product in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="product-card">
+
+                        <!-- Product Name -->
+                        <h5 class="product-name">
+                            @product.Name
+                        </h5>
+
+                        <!-- Description -->
+                        <p class="product-description">
+                            @product.Description
+                        </p>
+
+                        <!-- Stock Status -->
+                        @if (product.Quantity <= product.MinimumStock)
+                        {
+                            <span class="badge bg-danger">
+                                ⚠️ Stock faible
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success">
+                                ✓ Stock normal
+                            </span>
+                        }
+
+                        <!-- Product Information -->
+                        <div class="product-info">
+
+                            <div>
+                                <strong>Category:</strong>
+                                @product.Category?.Name
+                            </div>
+
+                            <div>
+                                <strong>Price:</strong>
+                                @product.Price.ToString("N2")
+                            </div>
+
+                            <div>
+                                <strong>Quantity:</strong>
+                                @product.Quantity
+                            </div>
+
+                            <div>
+                                <strong>Minimum Stock:</strong>
+                                @product.MinimumStock
+                            </div>
+
+                            <div>
+                                <strong>Created:</strong>
+                                @product.CreatedAt.ToString("dd/MM/yyyy")
+                            </div>
+
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="product-actions">
+
+                            <a asp-action="Edit"
+                               asp-route-id="@product.Id"
+                               class="btn btn-outline-primary btn-sm">
+                                ✏️ Edit
+                            </a>
+
+                            <a asp-action="Delete"
+                               asp-route-id="@product.Id"
+                               class="btn btn-outline-danger btn-sm">
+                                🗑️ Delete
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+        }
+
+    </div>
+
+    <!-- Stock Alerts Button -->
+    <div class="mt-4 text-end">
+
+        <a asp-controller="Product"
+           asp-action="LowStock"
+           class="btn btn-warning fw-bold">
+            ⚠️ View Stock Alerts
+        </a>
+
+    </div>
+
+</div>
