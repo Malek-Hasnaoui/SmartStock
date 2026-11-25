@@ -1,4 +1,4 @@
-﻿﻿
+﻿
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,171 +13,404 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SmartStock.styles.css" asp-append-version="true" />
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
-        .smart-navbar {
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
-            padding: 12px 0;
+        :root {
+            --primary: #2563eb;
+            --sidebar-bg: #ffffff;
+            --sidebar-muted: #475569;
+            --page-bg: #f5f7fb;
+            --text-main: #172033;
         }
 
-            .smart-navbar .navbar-brand {
-                color: white;
-                font-size: 23px;
-                font-weight: bold;
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: var(--page-bg);
+            color: var(--text-main);
+        }
+
+        .app-wrapper {
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 255px;
+            background: var(--sidebar-bg);
+            color: #172033;
+            border-right: 1px solid #e2e8f0;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            padding: 25px 17px;
+            transition: transform .3s ease;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 5px 12px 35px;
+            color: #172033;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+        }
+
+        .brand-name {
+            font-size: 21px;
+            font-weight: 800;
+            letter-spacing: -.5px;
+        }
+
+        .menu-label {
+            color: #64748b;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.3px;
+            padding: 12px 13px;
+            text-transform: uppercase;
+        }
+
+        .sidebar .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            color: var(--sidebar-muted);
+            padding: 12px 14px;
+            margin-bottom: 6px;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: .2s;
+        }
+
+            .sidebar .nav-link:hover,
+            .sidebar .nav-link.active {
+                background: #eff6ff;
+                color: #1d4ed8;
             }
 
-            .smart-navbar .nav-link {
-                color: rgba(255,255,255,0.9) !important;
-                font-weight: 500;
-                margin: 0 5px;
-                transition: 0.2s;
+        .sidebar .sidebar-bottom {
+            border-top-color: #e2e8f0;
+        }
+
+        .sidebar .sidebar-bottom .nav-link,
+        .sidebar .sidebar-bottom .nav-link.text-dark {
+            color: #475569 !important;
+        }
+
+        .sidebar .sidebar-bottom .nav-link:hover,
+        .sidebar .sidebar-bottom .nav-link.text-dark:hover {
+            color: #1d4ed8 !important;
+        }
+
+        body.dark-mode .sidebar {
+            background: #111827;
+            color: white;
+            border-right-color: #293244;
+        }
+
+        body.dark-mode .sidebar .brand {
+            color: white;
+        }
+
+        body.dark-mode .sidebar .menu-label {
+            color: #6b7280;
+        }
+
+        body.dark-mode .sidebar .nav-link,
+        body.dark-mode .sidebar .sidebar-bottom .nav-link,
+        body.dark-mode .sidebar .sidebar-bottom .nav-link.text-dark {
+            color: #9ca3af !important;
+        }
+
+        body.dark-mode .sidebar .nav-link:hover,
+        body.dark-mode .sidebar .nav-link.active,
+        body.dark-mode .sidebar .sidebar-bottom .nav-link:hover {
+            background: #263b60;
+            color: white !important;
+        }
+
+        body.dark-mode .sidebar .sidebar-bottom {
+            border-top-color: #293244;
+        }
+
+        .nav-icon {
+            width: 22px;
+            font-size: 17px;
+            text-align: center;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            border-top: 1px solid #293244;
+            padding-top: 20px;
+        }
+
+        /* MAIN CONTENT */
+        .main-area {
+            margin-left: 255px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: 76px;
+            background: white;
+            border-bottom: 1px solid #e9edf3;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 35px;
+            position: sticky;
+            top: 0;
+            z-index: 900;
+        }
+
+        .topbar-title {
+            font-size: 17px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .topbar-subtitle {
+            color: #8b95a5;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .content-area {
+            padding: 32px 35px;
+            max-width: 1600px;
+            margin: auto;
+            min-height: calc(100vh - 145px);
+        }
+
+        .page-footer {
+            padding: 18px 35px;
+            color: #8b95a5;
+            font-size: 12px;
+            border-top: 1px solid #e9edf3;
+            background: white;
+        }
+
+        .mobile-menu {
+            display: none;
+            border: none;
+            background: transparent;
+            font-size: 24px;
+        }
+
+        .sidebar-overlay {
+            display: none;
+        }
+
+        /* LOGIN PARTIAL */
+        .topbar .navbar-nav {
+            flex-direction: row;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .topbar a {
+            text-decoration: none;
+        }
+
+        @@media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
             }
 
-                .smart-navbar .nav-link:hover {
-                    color: white !important;
-                    background: rgba(255,255,255,0.15);
-                    border-radius: 8px;
+                .sidebar.show {
+                    transform: translateX(0);
                 }
 
-            .smart-navbar .navbar-toggler {
-                border-color: white;
+            .main-area {
+                margin-left: 0;
             }
 
-            .smart-navbar .navbar-toggler-icon {
-                filter: brightness(0) invert(1);
+            .mobile-menu {
+                display: block;
             }
 
-        main {
-            min-height: 75vh;
-        }
+            .sidebar-overlay.show {
+                display: block;
+                position: fixed;
+                inset: 0;
+                background: rgba(255,255,255,.08);
+                z-index: 999;
+            }
 
-        footer {
-            padding: 18px 0;
-            margin-top: 30px;
+            body.dark-mode .sidebar-overlay.show {
+                background: rgba(0,0,0,.45);
+            }
+
+            .topbar {
+                padding: 0 18px;
+            }
+
+            .content-area {
+                padding: 22px 16px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <!-- NAVBAR -->
-    <header>
-        <nav class="navbar navbar-expand-lg smart-navbar shadow">
+    <div class="app-wrapper">
 
-            <div class="container-fluid">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
 
-                <a class="navbar-brand"
-                   asp-controller="Home"
-                   asp-action="Index">
-                    📦 SmartStock
+            <a asp-controller="Dashboard"
+               asp-action="Index"
+               class="brand">
+
+                <div class="brand-icon">📦</div>
+                <span class="brand-name">SmartStock</span>
+            </a>
+
+            <div class="menu-label">Main Menu</div>
+
+            <nav class="nav flex-column">
+
+                <a asp-controller="Dashboard"
+                   asp-action="Index"
+                   class="nav-link">
+                    <span class="nav-icon">▦</span>
+                    Dashboard
                 </a>
 
-                <button class="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#mainNavbar"
-                        aria-controls="mainNavbar"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
+                <a asp-controller="Product"
+                   asp-action="Index"
+                   class="nav-link">
+                    <span class="nav-icon">📦</span>
+                    Products
+                </a>
 
-                    <span class="navbar-toggler-icon"></span>
+                <a asp-controller="Category"
+                   asp-action="Index"
+                   class="nav-link">
+                    <span class="nav-icon">📁</span>
+                    Categories
+                </a>
 
-                </button>
+                <a asp-controller="Product"
+                   asp-action="LowStock"
+                   class="nav-link">
+                    <span class="nav-icon">⚠️</span>
+                    Stock Alerts
+                </a>
 
-                <div class="collapse navbar-collapse" id="mainNavbar">
+            </nav>
 
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <div class="sidebar-bottom">
 
-                        <!-- HOME -->
-                        <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Home"
-                               asp-action="Index">
-                                🏠 Home
-                            </a>
-                        </li>
+                <div class="menu-label">Account</div>
 
-                        <!-- PRODUCTS -->
-                        <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Product"
-                               asp-action="Index">
-                                📦 Products
-                            </a>
-                        </li>
+                <a asp-controller="Home"
+                   asp-action="Privacy"
+                   class="nav-link">
+                    <span class="nav-icon">⚙</span>
+                    Privacy
+                </a>
 
-                        <!-- CATEGORIES -->
-                        <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Category"
-                               asp-action="Index">
-                                📁 Categories
-                            </a>
-                        </li>
-
-                        <!-- STOCK ALERTS -->
-                        <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Product"
-                               asp-action="LowStock">
-                                ⚠️ Stock Alerts
-                            </a>
-                        </li>
-
-                        <!-- PRIVACY -->
-                        <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Home"
-                               asp-action="Privacy">
-                                Privacy
-                            </a>
-                        </li>
-
-                    </ul>
-
-                    <!-- LOGIN / REGISTER -->
-                    <partial name="_LoginPartial" />
-
-                </div>
+                <partial name="_LoginPartial" />
 
             </div>
 
-        </nav>
-    </header>
+        </aside>
 
-    <!-- PAGE CONTENT -->
-    <div class="container mt-4">
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-        <main role="main" class="pb-3">
+        <!-- MAIN AREA -->
+        <div class="main-area">
 
-            @RenderBody()
+            <!-- TOPBAR -->
+            <header class="topbar">
 
-        </main>
+                <div class="d-flex align-items-center gap-3">
 
-    </div>
+                    <button class="mobile-menu"
+                            id="menuToggle"
+                            type="button">
+                        ☰
+                    </button>
 
-    <!-- FOOTER -->
-    <footer class="border-top text-muted">
+                    <div>
+                        <h6 class="topbar-title">Inventory Management</h6>
+                        <div class="topbar-subtitle">
+                            Manage your stock efficiently
+                        </div>
+                    </div>
 
-        <div class="container text-center">
+                </div>
 
-            &copy; 2026 - SmartStock |
-            Inventory Management System
+                <div class="d-flex align-items-center gap-3">
+                    <span class="text-muted small">
+                        SmartStock System
+                    </span>
+                </div>
 
-            <a asp-controller="Home"
-               asp-action="Privacy">
-                Privacy
-            </a>
+            </header>
+
+            <!-- PAGE CONTENT -->
+            <main class="content-area" role="main">
+                @RenderBody()
+            </main>
+
+            <!-- FOOTER -->
+            <footer class="page-footer">
+                <div class="d-flex justify-content-between flex-wrap gap-2">
+                    <span>© 2026 SmartStock. All rights reserved.</span>
+                    <span>Inventory Management System</span>
+                </div>
+            </footer>
 
         </div>
 
-    </footer>
+    </div>
 
-    <!-- SCRIPTS -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        const menuToggle = document.getElementById("menuToggle");
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("sidebarOverlay");
+
+        menuToggle?.addEventListener("click", function () {
+            sidebar.classList.toggle("show");
+            overlay.classList.toggle("show");
+        });
+
+        overlay?.addEventListener("click", function () {
+            sidebar.classList.remove("show");
+            overlay.classList.remove("show");
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 

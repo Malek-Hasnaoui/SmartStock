@@ -5,167 +5,376 @@
 
     var totalAlerts = Model.Count;
     var totalQuantity = Model.Sum(p => p.Quantity);
+    var criticalCount = Model.Count(p => p.Quantity == 0);
+    var missingUnits = Model.Sum(p => Math.Max(0, p.MinimumStock - p.Quantity));
 }
 
 <style>
-    .alerts-container {
-        padding: 30px 15px;
+    .alerts-page {
+        padding: 10px 0 30px;
     }
 
-    .alerts-header {
-        background: linear-gradient(135deg, #2563eb, #7c3aed);
-        color: white;
+    .alerts-hero {
+        position: relative;
+        overflow: hidden;
         padding: 30px;
         border-radius: 18px;
+        color: white;
+        background: linear-gradient(120deg, #1e3a8a, #2563eb, #7c3aed);
         margin-bottom: 25px;
-        box-shadow: 0 8px 25px rgba(37, 99, 235, 0.2);
     }
 
-        .alerts-header h2 {
-            font-weight: 700;
+        .alerts-hero h2 {
+            font-size: 25px;
+            font-weight: 750;
             margin-bottom: 8px;
         }
 
-    .stat-card {
-        background: white;
-        padding: 22px;
-        border-radius: 15px;
-        box-shadow: 0 3px 15px rgba(0,0,0,0.07);
-        margin-bottom: 20px;
+        .alerts-hero p {
+            color: rgba(255,255,255,.85);
+            margin: 0;
+        }
+
+    .hero-icon {
+        font-size: 48px;
+        opacity: .9;
     }
 
-        .stat-card h3 {
-            font-size: 28px;
-            font-weight: bold;
-            margin: 10px 0 0;
+    .alert-stat {
+        background: white;
+        border: 1px solid #e9edf5;
+        border-radius: 16px;
+        padding: 22px;
+        height: 100%;
+        box-shadow: 0 4px 15px rgba(15, 23, 42, .04);
+        transition: transform .2s, box-shadow .2s;
+    }
+
+        .alert-stat:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, .08);
+        }
+
+    .stat-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .stat-icon {
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        font-size: 21px;
+    }
+
+    .icon-red {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    .icon-blue {
+        background: #dbeafe;
+        color: #2563eb;
+    }
+
+    .icon-orange {
+        background: #ffedd5;
+        color: #ea580c;
+    }
+
+    .stat-label {
+        color: #64748b;
+        font-size: 13px;
+        font-weight: 600;
+        margin-top: 15px;
+    }
+
+    .stat-value {
+        font-size: 29px;
+        font-weight: 750;
+        color: #172033;
+        margin-top: 5px;
+    }
+
+    .stat-description {
+        color: #94a3b8;
+        font-size: 12px;
+        margin-top: 4px;
+    }
+
+    .alerts-panel {
+        background: white;
+        border: 1px solid #e9edf5;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 15px rgba(15, 23, 42, .04);
+        margin-top: 25px;
+    }
+
+    .panel-title {
+        font-size: 18px;
+        font-weight: 750;
+        color: #172033;
+        margin-bottom: 5px;
+    }
+
+    .panel-subtitle {
+        color: #94a3b8;
+        font-size: 13px;
+    }
+
+    .alert-search {
+        max-width: 280px;
+        border-radius: 10px;
+        padding: 10px 13px;
+        border: 1px solid #e2e8f0;
+        outline: none;
+        font-size: 13px;
+    }
+
+        .alert-search:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, .1);
         }
 
     .alert-table {
-        background: white;
-        border-radius: 15px;
-        padding: 20px;
-        box-shadow: 0 3px 15px rgba(0,0,0,0.07);
+        margin-top: 20px;
+        vertical-align: middle;
     }
 
-        .alert-table table {
-            margin-bottom: 0;
-            vertical-align: middle;
+        .alert-table thead th {
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            padding: 15px;
+            border-bottom: 1px solid #e9edf5;
+            white-space: nowrap;
         }
 
-    .product-name {
-        font-weight: 600;
+        .alert-table tbody td {
+            padding: 16px 15px;
+            color: #475569;
+            font-size: 13px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .alert-table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+    .product-cell {
+        color: #172033 !important;
+        font-weight: 700;
     }
 
-    .quantity-danger {
-        color: #dc2626;
-        font-weight: bold;
+    .quantity-number {
+        font-weight: 750;
+        color: #dc2626 !important;
+    }
+
+    .missing-number {
+        font-weight: 750;
+        color: #ea580c !important;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 11px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .status-critical {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
+    .status-low {
+        background: #ffedd5;
+        color: #c2410c;
     }
 
     .empty-state {
         text-align: center;
         padding: 55px 20px;
-        background: white;
-        border-radius: 15px;
     }
 
-        .empty-state .emoji {
-            font-size: 55px;
-            margin-bottom: 15px;
-        }
-
-    body.dark-mode .stat-card,
-    body.dark-mode .alert-table,
-    body.dark-mode .empty-state {
-        background: #1e293b;
-        color: #f1f5f9;
+    .empty-icon {
+        width: 75px;
+        height: 75px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #dcfce7;
+        color: #16a34a;
+        font-size: 35px;
+        border-radius: 50%;
+        margin: 0 auto 20px;
     }
 
-    body.dark-mode .table {
-        color: #f1f5f9;
+    .empty-state h4 {
+        font-weight: 750;
+        color: #172033;
     }
 
-        body.dark-mode .table td,
-        body.dark-mode .table th {
-            border-color: #475569;
-        }
+    .empty-state p {
+        color: #94a3b8;
+        font-size: 14px;
+    }
 
-    body.dark-mode .text-muted {
-        color: #cbd5e1 !important;
+    .alerts-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 18px;
+        color: #94a3b8;
+        font-size: 12px;
     }
 
     @@media (max-width: 768px) {
-        .alerts-header {
+        .alerts-hero {
             padding: 22px;
         }
 
-        .alert-table {
-            overflow-x: auto;
+        .hero-icon {
+            display: none;
+        }
+
+        .alerts-panel {
+            padding: 16px;
+        }
+
+        .alert-search {
+            max-width: 100%;
+            width: 100%;
         }
     }
 </style>
 
-<div class="container alerts-container">
+<div class="alerts-page">
 
     <!-- Header -->
-    <div class="alerts-header">
+    <div class="alerts-hero">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
             <div>
+                <div class="mb-2 small fw-semibold">
+                    SMARTSTOCK / INVENTORY MANAGEMENT
+                </div>
+
                 <h2>⚠️ Stock Alerts</h2>
-                <p class="mb-0">
-                    Monitor products that need restocking.
+
+                <p>
+                    Monitor low-stock products and identify items that need restocking.
                 </p>
+
+                <a asp-controller="Product"
+                   asp-action="Index"
+                   class="btn btn-light btn-sm fw-semibold mt-3">
+                    ← Back to Products
+                </a>
             </div>
 
-            <a asp-controller="Product"
-               asp-action="Index"
-               class="btn btn-light fw-bold">
-                ← Back to Products
-            </a>
+            <div class="hero-icon">📦</div>
         </div>
     </div>
 
     <!-- Statistics -->
-    <div class="row">
+    <div class="row g-3">
 
-        <div class="col-md-6">
-            <div class="stat-card">
-                <div class="text-muted">Products with low stock</div>
-                <h3 class="text-danger">@totalAlerts</h3>
-                <small class="text-muted">
+        <div class="col-xl-4 col-md-6">
+            <div class="alert-stat">
+                <div class="stat-top">
+                    <div class="stat-icon icon-red">⚠️</div>
+                    <span class="status-badge status-low">Attention</span>
+                </div>
+
+                <div class="stat-label">Products with low stock</div>
+                <div class="stat-value">@totalAlerts</div>
+                <div class="stat-description">
                     Products requiring attention
-                </small>
+                </div>
             </div>
         </div>
 
-        <div class="col-md-6">
-            <div class="stat-card">
-                <div class="text-muted">Remaining quantity</div>
-                <h3 class="text-primary">@totalQuantity</h3>
-                <small class="text-muted">
-                    Total units in low-stock products
-                </small>
+        <div class="col-xl-4 col-md-6">
+            <div class="alert-stat">
+                <div class="stat-top">
+                    <div class="stat-icon icon-blue">📦</div>
+                </div>
+
+                <div class="stat-label">Remaining quantity</div>
+                <div class="stat-value">@totalQuantity</div>
+                <div class="stat-description">
+                    Units available in low-stock products
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-6">
+            <div class="alert-stat">
+                <div class="stat-top">
+                    <div class="stat-icon icon-orange">🚨</div>
+                    <span class="status-badge status-critical">Critical</span>
+                </div>
+
+                <div class="stat-label">Out of stock</div>
+                <div class="stat-value">@criticalCount</div>
+                <div class="stat-description">
+                    Products with zero available quantity
+                </div>
             </div>
         </div>
 
     </div>
 
     <!-- Alerts Table -->
-    <div class="alert-table">
+    <div class="alerts-panel">
 
-        <h4 class="mb-4">Low Stock Products</h4>
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h4 class="panel-title">Low Stock Products</h4>
+                <div class="panel-subtitle">
+                    Products that are below their minimum stock level
+                </div>
+            </div>
+
+            @if (Model.Any())
+            {
+                <input type="text"
+                       id="alertSearch"
+                       class="form-control alert-search"
+                       placeholder="🔍 Search products..." />
+            }
+        </div>
 
         @if (!Model.Any())
         {
             <div class="empty-state">
-                <div class="emoji">✅</div>
+                <div class="empty-icon">✓</div>
+
                 <h4>All Stock Levels Are Healthy!</h4>
-                <p class="text-muted">
-                    No products currently require restocking.
+
+                <p>
+                    Great job! No products currently require restocking.
                 </p>
 
                 <a asp-controller="Product"
                    asp-action="Index"
-                   class="btn btn-primary mt-2">
+                   class="btn btn-primary mt-2 px-4">
                     View Products
                 </a>
             </div>
@@ -173,8 +382,7 @@
         else
         {
             <div class="table-responsive">
-                <table class="table table-hover">
-
+                <table class="table alert-table" id="alertsTable">
                     <thead>
                         <tr>
                             <th>Product</th>
@@ -189,16 +397,18 @@
                     <tbody>
                         @foreach (var product in Model)
                         {
+                            var missing = Math.Max(0, product.MinimumStock - product.Quantity);
+
                             <tr>
-                                <td class="product-name">
+                                <td class="product-cell">
                                     @product.Name
                                 </td>
 
                                 <td>
-                                    @product.Category?.Name
+                                    @(product.Category?.Name ?? "Uncategorized")
                                 </td>
 
-                                <td class="quantity-danger">
+                                <td class="quantity-number">
                                     @product.Quantity
                                 </td>
 
@@ -206,23 +416,68 @@
                                     @product.MinimumStock
                                 </td>
 
-                                <td>
-                                    @(Math.Max(0, product.MinimumStock - product.Quantity))
+                                <td class="missing-number">
+                                    @missing
                                 </td>
 
                                 <td>
-                                    <span class="badge bg-danger">
-                                        Low Stock
-                                    </span>
+                                    @if (product.Quantity == 0)
+                                    {
+                                        <span class="status-badge status-critical">
+                                            ● Out of Stock
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="status-badge status-low">
+                                            ● Low Stock
+                                        </span>
+                                    }
                                 </td>
                             </tr>
                         }
                     </tbody>
-
                 </table>
+            </div>
+
+            <div class="alerts-footer">
+                <span id="visibleCount">
+                    Showing @totalAlerts products
+                </span>
+
+                <span>
+                    Total missing units: <strong>@missingUnits</strong>
+                </span>
             </div>
         }
 
     </div>
 
 </div>
+
+@section Scripts {
+    <script>
+        const searchInput = document.getElementById("alertSearch");
+
+        if (searchInput) {
+            searchInput.addEventListener("input", function () {
+                const searchValue = this.value.toLowerCase();
+                const rows = document.querySelectorAll("#alertsTable tbody tr");
+                let visible = 0;
+
+                rows.forEach(row => {
+                    const matches = row.innerText.toLowerCase().includes(searchValue);
+
+                    row.style.display = matches ? "" : "none";
+
+                    if (matches) {
+                        visible++;
+                    }
+                });
+
+                document.getElementById("visibleCount").textContent =
+                    `Showing ${visible} products`;
+            });
+        }
+    </script>
+}

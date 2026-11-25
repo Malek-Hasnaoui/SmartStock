@@ -1,10 +1,13 @@
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 using SmartStock.Models;
 using SmartStock.Services;
 
 namespace SmartStock.Controllers
 {
+    [Authorize]
     public class ProductController : Controller
     {
         private readonly ProductService _productService;
@@ -96,6 +99,7 @@ namespace SmartStock.Controllers
 
             return View(lowStockProducts);
         }
+
         private async Task LoadCategories(int? selectedId = null)
         {
             var categories = await _productService.GetCategoriesAsync();

@@ -1,9 +1,11 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using SmartStock.Services;
 
 namespace SmartStock.Controllers
 {
+    [Authorize]
     public class DashboardController : Controller
     {
         private readonly DashboardService _dashboardService;

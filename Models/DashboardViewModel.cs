@@ -9,6 +9,8 @@ namespace SmartStock.Models
 
         public int TotalCategories { get; set; }
 
+        public int TotalStock { get; set; }
+
         public decimal TotalStockValue { get; set; }
 
         public int LowStockCount { get; set; }

@@ -4,96 +4,363 @@
     ViewData["Title"] = "Edit Product";
 }
 
-<div class="container py-5">
-    <div class="card shadow border-0 rounded-4 mx-auto" style="max-width:700px">
-        <div class="card-header text-white p-4"
-             style="background:linear-gradient(120deg,#263c91,#7656d6)">
-            <h3 class="mb-1">✏️ Edit Product</h3>
-            <p class="mb-0">Update product information.</p>
+<style>
+    .edit-page {
+        max-width: 950px;
+        margin: 0 auto;
+        padding: 15px 0 35px;
+    }
+
+    .edit-header {
+        margin-bottom: 25px;
+    }
+
+        .edit-header h2 {
+            color: #172033;
+            font-weight: 750;
+            font-size: 25px;
+            margin-bottom: 7px;
+        }
+
+        .edit-header p {
+            color: #8b95a5;
+            margin: 0;
+        }
+
+    .edit-card {
+        background: white;
+        border: 1px solid #e9edf3;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(15,23,42,.04);
+    }
+
+    .form-banner {
+        background: linear-gradient(120deg, #1e40af, #4f46e5, #7c3aed);
+        color: white;
+        padding: 27px 30px;
+    }
+
+        .form-banner h4 {
+            font-weight: 750;
+            margin-bottom: 6px;
+        }
+
+        .form-banner p {
+            color: rgba(255,255,255,.8);
+            margin: 0;
+            font-size: 13px;
+        }
+
+    .form-content {
+        padding: 30px;
+    }
+
+    .form-section-title {
+        font-size: 15px;
+        font-weight: 750;
+        color: #172033;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #edf0f4;
+    }
+
+    .form-label {
+        color: #334155;
+        font-weight: 650;
+        font-size: 13px;
+        margin-bottom: 8px;
+    }
+
+    .form-control,
+    .form-select {
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 11px 13px;
+        font-size: 13px;
+        color: #334155;
+        background-color: white;
+    }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,.10);
+        }
+
+    textarea.form-control {
+        resize: vertical;
+        min-height: 105px;
+    }
+
+    .field-hint {
+        color: #94a3b8;
+        font-size: 11px;
+        margin-top: 6px;
+    }
+
+    .product-reference {
+        background: #eff6ff;
+        border: 1px solid #dbeafe;
+        color: #1d4ed8;
+        border-radius: 10px;
+        padding: 12px 15px;
+        margin-bottom: 25px;
+        font-size: 13px;
+    }
+
+    .form-actions {
+        border-top: 1px solid #edf0f4;
+        margin-top: 28px;
+        padding-top: 22px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .btn-update {
+        background: #2563eb;
+        color: white;
+        border: none;
+        border-radius: 9px;
+        padding: 11px 23px;
+        font-weight: 650;
+        font-size: 13px;
+    }
+
+        .btn-update:hover {
+            background: #1d4ed8;
+            color: white;
+        }
+
+    .btn-cancel {
+        border: 1px solid #e2e8f0;
+        color: #64748b;
+        background: white;
+        border-radius: 9px;
+        padding: 11px 20px;
+        font-weight: 600;
+        font-size: 13px;
+        text-decoration: none;
+    }
+
+        .btn-cancel:hover {
+            background: #f8fafc;
+            color: #334155;
+        }
+
+    .validation-summary-errors {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 10px;
+        padding: 12px 15px;
+        margin-bottom: 20px;
+        color: #dc2626;
+        font-size: 13px;
+    }
+
+        .validation-summary-errors ul {
+            margin-bottom: 0;
+        }
+
+    .field-validation-error {
+        color: #dc2626;
+        font-size: 12px;
+        display: block;
+        margin-top: 5px;
+    }
+
+    .input-validation-error {
+        border-color: #dc2626 !important;
+    }
+
+    @@media (max-width: 768px) {
+        .form-content {
+            padding: 20px;
+        }
+
+        .form-banner {
+            padding: 22px;
+        }
+
+        .form-actions {
+            flex-direction: column-reverse;
+            align-items: stretch;
+        }
+
+            .form-actions a,
+            .form-actions button {
+                width: 100%;
+                text-align: center;
+            }
+    }
+</style>
+
+<div class="container-fluid edit-page">
+
+    <!-- Page Heading -->
+    <div class="edit-header">
+        <h2>Edit Product</h2>
+        <p>Update your product information and stock details.</p>
+    </div>
+
+    <div class="edit-card">
+
+        <!-- Form Header -->
+        <div class="form-banner">
+            <h4>✏️ Update Product Information</h4>
+            <p>Modify the information below and save your changes.</p>
         </div>
 
-        <div class="card-body p-4">
-            <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+        <!-- Form Body -->
+        <div class="form-content">
+
+            <div class="product-reference">
+                <strong>Product ID:</strong> #@Model.Id
+                <span class="ms-2">|</span>
+                <span class="ms-2">Editing: @Model.Name</span>
+            </div>
+
+            <form asp-action="Edit"
+                  asp-route-id="@Model.Id"
+                  method="post">
+
                 @Html.AntiForgeryToken()
 
                 <input type="hidden" asp-for="Id" />
 
                 <div asp-validation-summary="ModelOnly"
-                     class="text-danger mb-3"></div>
-
-                <div class="mb-3">
-                    <label asp-for="Name"
-                           class="form-label fw-bold"></label>
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name"
-                          class="text-danger"></span>
+                     class="text-danger mb-3">
                 </div>
 
-                <div class="mb-3">
-                    <label asp-for="Description"
-                           class="form-label fw-bold"></label>
-                    <textarea asp-for="Description"
-                              class="form-control" rows="3"></textarea>
-                    <span asp-validation-for="Description"
-                          class="text-danger"></span>
+                <!-- General Information -->
+                <div class="form-section-title">
+                    General Information
                 </div>
 
                 <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="Price"
-                               class="form-label fw-bold"></label>
-                        <input asp-for="Price" type="number"
-                               step="0.01" class="form-control" />
-                        <span asp-validation-for="Price"
-                              class="text-danger"></span>
+
+                    <div class="col-12 mb-4">
+                        <label asp-for="Name" class="form-label">
+                            Product Name *
+                        </label>
+
+                        <input asp-for="Name"
+                               class="form-control"
+                               placeholder="Enter product name" />
+
+                        <span asp-validation-for="Name"></span>
                     </div>
 
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="Quantity"
-                               class="form-label fw-bold"></label>
-                        <input asp-for="Quantity" type="number"
-                               class="form-control" />
-                        <span asp-validation-for="Quantity"
-                              class="text-danger"></span>
+                    <div class="col-12 mb-4">
+                        <label asp-for="Description" class="form-label">
+                            Description
+                        </label>
+
+                        <textarea asp-for="Description"
+                                  class="form-control"
+                                  placeholder="Enter product description..."></textarea>
+
+                        <span asp-validation-for="Description"></span>
+
+                        <div class="field-hint">
+                            Update the product description if necessary.
+                        </div>
                     </div>
+
                 </div>
 
-                <div class="mb-3">
-                    <label asp-for="MinimumStock"
-                           class="form-label fw-bold"></label>
-                    <input asp-for="MinimumStock" type="number"
-                           class="form-control" />
-                    <span asp-validation-for="MinimumStock"
-                          class="text-danger"></span>
+                <!-- Stock Information -->
+                <div class="form-section-title mt-2">
+                    Pricing & Stock Information
                 </div>
 
-                <div class="mb-4">
-                    <label asp-for="CategoryId"
-                           class="form-label fw-bold">
-                        Category
-                    </label>
-                    <select asp-for="CategoryId"
-                            asp-items="ViewBag.CategoryId"
-                            class="form-select">
-                        <option value="">-- Select Category --</option>
-                    </select>
-                    <span asp-validation-for="CategoryId"
-                          class="text-danger"></span>
+                <div class="row">
+
+                    <div class="col-md-6 mb-4">
+                        <label asp-for="Price" class="form-label">
+                            Price (TND) *
+                        </label>
+
+                        <input asp-for="Price"
+                               type="number"
+                               step="0.01"
+                               min="0"
+                               class="form-control"
+                               placeholder="0.00" />
+
+                        <span asp-validation-for="Price"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <label asp-for="Quantity" class="form-label">
+                            Available Quantity *
+                        </label>
+
+                        <input asp-for="Quantity"
+                               type="number"
+                               min="0"
+                               class="form-control"
+                               placeholder="Enter quantity" />
+
+                        <span asp-validation-for="Quantity"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <label asp-for="MinimumStock" class="form-label">
+                            Minimum Stock *
+                        </label>
+
+                        <input asp-for="MinimumStock"
+                               type="number"
+                               min="0"
+                               class="form-control"
+                               placeholder="Enter minimum stock" />
+
+                        <span asp-validation-for="MinimumStock"></span>
+
+                        <div class="field-hint">
+                            Minimum quantity before triggering a stock alert.
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <label asp-for="CategoryId" class="form-label">
+                            Product Category *
+                        </label>
+
+                        <select asp-for="CategoryId"
+                                asp-items="ViewBag.CategoryId"
+                                class="form-select">
+
+                            <option value="">-- Select Category --</option>
+
+                        </select>
+
+                        <span asp-validation-for="CategoryId"></span>
+                    </div>
+
                 </div>
 
-                <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-primary px-4">
+                <!-- Actions -->
+                <div class="form-actions">
+
+                    <a asp-action="Index" class="btn-cancel">
+                        ← Cancel
+                    </a>
+
+                    <button type="submit" class="btn-update">
                         💾 Update Product
                     </button>
 
-                    <a asp-action="Index"
-                       class="btn btn-outline-secondary">
-                        Cancel
-                    </a>
                 </div>
+
             </form>
+
         </div>
     </div>
+
 </div>
 
 @section Scripts {

@@ -22,15 +22,22 @@ namespace SmartStock.Services
 
             var dashboard = new DashboardViewModel();
 
+            // Total number of products
             dashboard.TotalProducts = products.Count;
 
+            // Total number of categories
             dashboard.TotalCategories =
                 await _context.Categories.CountAsync();
 
+            // Total available quantity
+            dashboard.TotalStock = products.Sum(p => p.Quantity);
+
+            // Total inventory value = Price * Quantity
             dashboard.TotalStockValue = products.Sum(
                 p => p.Price * p.Quantity
             );
 
+            // Products requiring restocking
             dashboard.LowStockProducts = products
                 .Where(p => p.Quantity <= p.MinimumStock)
                 .ToList();

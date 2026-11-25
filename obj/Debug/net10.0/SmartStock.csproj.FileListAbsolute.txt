@@ -231,7 +231,6 @@ C:\Users\Malek\source\repos\SmartStock\SmartStock\obj\Debug\net10.0\compressed\v
 C:\Users\Malek\source\repos\SmartStock\SmartStock\obj\Debug\net10.0\compressed\yfc7ypekbg-{0}-mlv21k5csn-mlv21k5csn.gz
 C:\Users\Malek\source\repos\SmartStock\SmartStock\obj\Debug\net10.0\compressed\7mwbykfy6p-{0}-tchfgznwy8-tchfgznwy8.gz
 C:\Users\Malek\source\repos\SmartStock\SmartStock\obj\Debug\net10.0\compressed\wyrtiaq7gq-{0}-ewt2eet6lz-ewt2eet6lz.gz
-C:\Users\Malek\source\repos\SmartStock\SmartStock\obj\Debug\net10.0\compressed\9w72qvnajc-{0}-b9sayid5wm-b9sayid5wm.gz
 C:\Users\Malek\source\repos\SmartStock\SmartStock\obj\Debug\net10.0\compressed\yqeu8t488w-{0}-61n19gt1b8-61n19gt1b8.gz
 C:\Users\Malek\source\repos\SmartStock\SmartStock\obj\Debug\net10.0\compressed\10b9rkcfff-{0}-xtxxf3hu2r-xtxxf3hu2r.gz
 C:\Users\Malek\source\repos\SmartStock\SmartStock\obj\Debug\net10.0\compressed\avznftaoz2-{0}-bqjiyaj88i-bqjiyaj88i.gz
@@ -425,3 +424,14 @@ C:\Users\Malek\source\repos\SmartStock\SmartStock\bin\Debug\net10.0\zh-Hans\Micr
 C:\Users\Malek\source\repos\SmartStock\SmartStock\bin\Debug\net10.0\zh-Hant\Microsoft.CodeAnalysis.Scripting.resources.dll
 C:\Users\Malek\source\repos\SmartStock\SmartStock\bin\Debug\net10.0\MailKit.dll
 C:\Users\Malek\source\repos\SmartStock\SmartStock\bin\Debug\net10.0\MimeKit.Core.dll
+C:\Users\Malek\AppData\Local\Temp\SmartStock-build-verification\appsettings.Development.json
+C:\Users\Malek\AppData\Local\Temp\SmartStock-build-verification\appsettings.json
+C:\Users\Malek\AppData\Local\Temp\SmartStock-build-verification\SmartStock.staticwebassets.runtime.json
+C:\Users\Malek\AppData\Local\Temp\SmartStock-build-verification\SmartStock.staticwebassets.endpoints.json
+C:\Users\Malek\AppData\Local\Temp\SmartStock-build-verification\SmartStock.exe
+C:\Users\Malek\AppData\Local\Temp\SmartStock-build-verification\SmartStock.deps.json
+C:\Users\Malek\AppData\Local\Temp\SmartStock-build-verification\SmartStock.runtimeconfig.json
+C:\Users\Malek\AppData\Local\Temp\SmartStock-build-verification\SmartStock.runtimeconfig.dev.json
+C:\Users\Malek\AppData\Local\Temp\SmartStock-build-verification\SmartStock.dll
+C:\Users\Malek\AppData\Local\Temp\SmartStock-build-verification\SmartStock.pdb
+C:\Users\Malek\source\repos\SmartStock\SmartStock\obj\Debug\net10.0\compressed\9w72qvnajc-{0}-b9sayid5wm-b9sayid5wm.gz
